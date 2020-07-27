@@ -26,14 +26,14 @@
 class Quality{
   public:
     Quality();
-    Quality(string Algorithm,
-            string ONNXmodel,
-            string ONNXInputName,
-            string ONNXOutputName,
-            vector<string> in_features,
+    Quality(std::string Algorithm,
+            std::string ONNXmodel,
+            std::string ONNXInputName,
+            std::string ONNXOutputName,
+            std::vector<std::string> in_features
             );
 
-    Quality(string Algorithm,
+    Quality(std::string Algorithm,
             float maxZ0,
             float maxEta, 
             float chi2dofMax,
@@ -44,7 +44,7 @@ class Quality{
 
     ~Quality() = default;
 
-    vector<float> Feature_Transform();
+    std::vector<float> Feature_Transform();
     
     void Prediction();
 
@@ -54,11 +54,11 @@ class Quality{
 
 
   private:
-    string Algorithm_ = "None";
-    string ONNXmodel_;
-    string ONNXInputName_;
-    string ONNXOutputName_;
-    vector<string> in_features_;
+    std::string Algorithm_ = "None";
+    std::string ONNXmodel_;
+    std::string ONNXInputName_;
+    std::string ONNXOutputName_;
+    std::vector<std::string> in_features_;
     float maxZ0_ = 15;
     float maxEta_ = 2.4; 
     float chi2dofMax_ = 40;
