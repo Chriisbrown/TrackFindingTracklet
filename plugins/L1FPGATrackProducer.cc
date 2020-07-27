@@ -172,7 +172,7 @@ private:
   unsigned int nHelixPar_;
   bool extended_;
   bool quality_;
-  Quality::Quality Quality_model;
+  Quality Quality_model;
 
   std::map<string, vector<int>> dtclayerdisk;
 
