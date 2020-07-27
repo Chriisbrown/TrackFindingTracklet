@@ -91,7 +91,7 @@ vector<float> Quality::Feature_Transform(TTTrack < Ref_Phase2TrackerDigi_ > aTra
         }
 
     hitpattern_expanded_binary.pop_back(); //remove final unused bit
-    int tmp_trk_ltot;
+    int tmp_trk_ltot = 0;
     //calculate number of layer hits
     for (int i=0; i<6; ++i)
     {
@@ -99,7 +99,7 @@ vector<float> Quality::Feature_Transform(TTTrack < Ref_Phase2TrackerDigi_ > aTra
     }
     
 
-    int tmp_trk_dtot;
+    int tmp_trk_dtot = 0;
     //calculate number of disk hits
     for (int i=6; i<11; ++i)
     {
@@ -165,24 +165,24 @@ vector<float> Quality::Feature_Transform(TTTrack < Ref_Phase2TrackerDigi_ > aTra
 
     
 void Quality::Prediction(TTTrack < Ref_Phase2TrackerDigi_ > aTrack) {
-    if (this.Algorithm_ == "Cut"){
+    if (this->Algorithm_ == "Cut"){
 
         float trk_pt = aTrack.momentum().perp();
         float trk_bend_chi2 = aTrack.stubPtConsistency();
         float trk_z0 = aTrack.z0();
         float trk_eta = aTrack.momentum().eta();
-        flaot trk_chi2 = aTrack.chi2();
+        float trk_chi2 = aTrack.chi2();
         const auto& stubRefs = aTrack.getStubRefs();
         int nStubs = stubRefs.size();
 
         float classification = 0.0; // Default classification is 0
 
-        if (trk_pt >= this.minPt_ && 
-            abs(trk_z0) < this.maxZ0_ && 
-            abs(trk_eta) < this.maxEta_ && 
-            trk_chi2 < this.chi2dofMax_ && 
-            trk_bend_chi2 < this.bendchi2Max_ && 
-            nStubs >= this.nStubsmin_) classification = 1.0;
+        if (trk_pt >= this->minPt_ && 
+            abs(trk_z0) < this->maxZ0_ && 
+            abs(trk_eta) < this->maxEta_ && 
+            trk_chi2 < this->chi2dofMax_ && 
+            trk_bend_chi2 < this->bendchi2Max_ && 
+            nStubs >= this->nStubsmin_) classification = 1.0;
             // Classification updated to 1 if conditions are met
 
             aTrack.settrkMVA1(classification);
@@ -194,23 +194,23 @@ void Quality::Prediction(TTTrack < Ref_Phase2TrackerDigi_ > aTrack) {
             cms::Ort::FloatArrays ortinput;
             cms::Ort::FloatArrays ortoutputs;
 
-            ortinput_names.push_back(this.ONNXInputName_);
-            ortoutput_names.push_back(this.ONNXIOutputName_);
+            ortinput_names.push_back(this->ONNXInputName_);
+            ortoutput_names.push_back(this->ONNXOutputName_);
 
-            vector<float> Transformed_features = Feature_Transform(aTrack,this.in_features_);
+            vector<float> Transformed_features = Feature_Transform(aTrack,this->in_features_);
 
-            cms::Ort::ONNXRuntime Runtime(this.ONNXmodel_); //Setup ONNX runtime
+            cms::Ort::ONNXRuntime Runtime(this->ONNXmodel_); //Setup ONNX runtime
 
             //ONNX runtime recieves a vector of vectors of floats so push back the input
             // vector of float to create a 1,1,21 ortinput
-            ortinput.push_back(Transformed_Features);
+            ortinput.push_back(Transformed_features);
 
             // batch_size 1 as only one set of transformed features is being processed
             int batch_size = 1;
             // Run classification on a batch of 1
             ortoutputs = Runtime.run(ortinput_names,ortinput,ortoutput_names,batch_size); 
             // access first value of nested vector
-            if (this.Algorithm_ == "NN"){
+            if (this->Algorithm_ == "NN"){
                 aTrack.settrkMVA1(ortoutputs[0][0]);
             }
 
@@ -221,11 +221,11 @@ void Quality::Prediction(TTTrack < Ref_Phase2TrackerDigi_ > aTrack) {
             //ortoutputs[1][0] = negative class probability
             //ortoutputs[1][1] = positive class probability
             
-            if (this.Algorithm_ == "GBDT"){
+            if (this->Algorithm_ == "GBDT"){
                 aTrack.settrkMVA1(ortoutputs[1][1]);
             }
 
-            if (this.Algorithm_ == "None"){
+            if (this->Algorithm_ == "None"){
                 aTrack.settrkMVA1(-999);
             }
 
@@ -239,7 +239,7 @@ void Quality::Set_Cut_Parameters(float maxZ0, float maxEta, float chi2dofMax,flo
     chi2dofMax_ = chi2dofMax;
     bendchi2Max_ = bendchi2Max;
     minPt_ = minPt;
-    nStubsmin_ = nStubsmin;
+    nStubsmin_ = nStubmin;
 
 }
 
