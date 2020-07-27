@@ -865,8 +865,9 @@ void L1TrackNtupleMaker::analyze(const edm::Event& iEvent, const edm::EventSetup
         tmp_trk_d0 = -tmp_trk_x0 * sin(tmp_trk_phi) + tmp_trk_y0 * cos(tmp_trk_phi);
       }
 
+      float tmp_trk_MVA1 = -999;
       if (TrackQuality) {
-        float tmp_trk_MVA1 = iterL1Track->trkMVA1();
+        tmp_trk_MVA1 = iterL1Track->trkMVA1();
       }
 
       float tmp_trk_chi2 = iterL1Track->chi2();
@@ -957,12 +958,10 @@ void L1TrackNtupleMaker::analyze(const edm::Event& iEvent, const edm::EventSetup
       m_trk_eta->push_back(tmp_trk_eta);
       m_trk_phi->push_back(tmp_trk_phi);
       m_trk_z0->push_back(tmp_trk_z0);
-      if (L1Tk_nPar == 5)
-        m_trk_d0->push_back(tmp_trk_d0);
-      if (TrackQuality)
-        m_trk_MVA1->push_back(tmp_trk_MVA1);
-      else
-        m_trk_d0->push_back(999.);
+      if (L1Tk_nPar == 5) m_trk_d0->push_back(tmp_trk_d0);
+      else m_trk_d0->push_back(999.);
+      if (TrackQuality) m_trk_MVA1->push_back(tmp_trk_MVA1);
+      else m_trk_MVA1->push_back(999.);
       m_trk_chi2->push_back(tmp_trk_chi2);
       m_trk_chi2rphi->push_back(tmp_trk_chi2rphi);
       m_trk_chi2rz->push_back(tmp_trk_chi2rz);
