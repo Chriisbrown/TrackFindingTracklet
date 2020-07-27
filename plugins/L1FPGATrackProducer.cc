@@ -289,7 +289,7 @@ L1FPGATrackProducer::L1FPGATrackProducer(edm::ParameterSet const& iConfig)
   quality_ = iConfig.getParameter<bool>("Quality");
   if (quality_){
     string Algorithm =  iConfig.getParameter<string>("Quality_Algorithm");
-    if (Algorithm = "Cut"){
+    if (Algorithm == "Cut"){
       Quality_model = Quality(Algorithm,
                              (float)iConfig.getParameter<double>("maxZ0"),
                              (float)iConfig.getParameter<double>("maxEta"),
