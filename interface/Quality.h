@@ -44,12 +44,15 @@ class Quality{
 
     ~Quality() = default;
 
-    std::vector<float> Feature_Transform();
+    std::vector<float> Feature_Transform(TTTrack <Ref_Phase2TrackerDigi_> aTrack, 
+					 std::vector<std::string> in_features);
     
-    void Prediction();
+    void Prediction(TTTrack <Ref_Phase2TrackerDigi_> aTrack);
 
-    void Set_Cut_Parameters();
-    void Set_ONNX_Model();
+    void Set_Cut_Parameters(float maxZ0, float maxEta, float chi2dofMax, float bendchi2Max, 
+			    float minPt, int nStubmin);
+    void Set_ONNX_Model(std::string Algorithm, std::string ONNXmodel, std::string ONNXInputName,
+			std::string ONNXOutputName, std::vector<std::string> in_features);
 
 
 
