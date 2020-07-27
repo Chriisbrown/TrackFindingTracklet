@@ -270,7 +270,7 @@ L1TrackNtupleMaker::L1TrackNtupleMaker(edm::ParameterSet const& iConfig) : confi
   L1Tk_minNStub = iConfig.getParameter<int>("L1Tk_minNStub");
 
   TrackingInJets = iConfig.getParameter<bool>("TrackingInJets");
-  TrackQuality = iConfig.getParameter<bool>("TrackingQuality");
+  TrackQuality = iConfig.getParameter<bool>("TrackQuality");
 
   L1StubInputTag = iConfig.getParameter<edm::InputTag>("L1StubInputTag");
   MCTruthClusterInputTag = iConfig.getParameter<edm::InputTag>("MCTruthClusterInputTag");
