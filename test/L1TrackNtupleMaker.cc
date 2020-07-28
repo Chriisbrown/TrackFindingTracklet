@@ -867,7 +867,7 @@ void L1TrackNtupleMaker::analyze(const edm::Event& iEvent, const edm::EventSetup
 
       float tmp_trk_MVA1 = -999;
       if (TrackQuality) {
-	std::cout << iterL1Track->trkMVA1() << std::endl;
+	      //std::cout << iterL1Track->trkMVA1() << std::endl;
         tmp_trk_MVA1 = iterL1Track->trkMVA1();
       }
 

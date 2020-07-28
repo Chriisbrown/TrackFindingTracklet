@@ -165,6 +165,7 @@ vector<float> Quality::Feature_Transform(TTTrack < Ref_Phase2TrackerDigi_ > aTra
 
     
 void Quality::Prediction(TTTrack < Ref_Phase2TrackerDigi_ > aTrack) {
+    cout << this->Algorithm_ << endl;
     if (this->Algorithm_ == "Cut"){
 
         float trk_pt = aTrack.momentum().perp();
