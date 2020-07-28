@@ -165,7 +165,6 @@ vector<float> Quality::Feature_Transform(TTTrack < Ref_Phase2TrackerDigi_ > aTra
 
     
 void Quality::Prediction(TTTrack < Ref_Phase2TrackerDigi_ > aTrack) {
-    cout << this->Algorithm_ << endl;
     if (this->Algorithm_ == "Cut"){
 
         float trk_pt = aTrack.momentum().perp();
@@ -200,7 +199,11 @@ void Quality::Prediction(TTTrack < Ref_Phase2TrackerDigi_ > aTrack) {
 
             vector<float> Transformed_features = Feature_Transform(aTrack,this->in_features_);
 
+            cout << "Transformed the features" << endl;
+
             cms::Ort::ONNXRuntime Runtime(this->ONNXmodel_); //Setup ONNX runtime
+
+            cout << "Setup the runtime" << endl;
 
             //ONNX runtime recieves a vector of vectors of floats so push back the input
             // vector of float to create a 1,1,21 ortinput
@@ -210,8 +213,10 @@ void Quality::Prediction(TTTrack < Ref_Phase2TrackerDigi_ > aTrack) {
             int batch_size = 1;
             // Run classification on a batch of 1
             ortoutputs = Runtime.run(ortinput_names,ortinput,ortoutput_names,batch_size); 
+            cout << "run the runtime" << endl;
             // access first value of nested vector
             if (this->Algorithm_ == "NN"){
+                cout << "set the mva" << endl;
                 aTrack.settrkMVA1(ortoutputs[0][0]);
             }
 
