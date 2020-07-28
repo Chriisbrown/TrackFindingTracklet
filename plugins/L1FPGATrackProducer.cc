@@ -300,7 +300,6 @@ L1FPGATrackProducer::L1FPGATrackProducer(edm::ParameterSet const& iConfig)
     }
 
     else{
-      cout << Algorithm << endl;
       Quality_model = Quality(Algorithm,
                               edm::FileInPath(iConfig.getParameter<string>("ONNXmodel")).fullPath(),
                               iConfig.getParameter<string>("ONNXInputName"),
@@ -710,7 +709,6 @@ void L1FPGATrackProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSe
         StubPtConsistency::getConsistency(aTrack, theTrackerGeom, tTopo, settings.bfield(), settings.nHelixPar()));
       
     if (quality_) {
-      cout << "performing the quality" << endl;
       Quality_model.Prediction(aTrack);
     }
     // set TTTrack word

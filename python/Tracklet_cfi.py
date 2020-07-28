@@ -37,7 +37,7 @@ TTTracksFromExtendedTrackletEmulation = TTTracksFromTrackletEmulation.clone(
 
 TTTracksFromTrackletEmulationWithQuality = TTTracksFromTrackletEmulation.clone(
                                                 Quality =cms.bool(True),
-                                                Quality_Algorithm = cms.string("NN"), #None, Cut, NN, GBDT
+                                                Quality_Algorithm = cms.string("Cut"), #None, Cut, NN, GBDT
 
                                                 ONNXmodel = cms.string("L1Trigger/TrackFindingTracklet/ML_data/FakeIDNN/NN_model.onnx"),
                                                 ONNXInputName = cms.string("input_1"),
