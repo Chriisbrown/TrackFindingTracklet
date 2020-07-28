@@ -12,7 +12,7 @@ process = cms.Process("L1TrackNtuple")
 ############################################################
 
 GEOMETRY = "D49"
-L1TRKALGO = 'HYBRID'  # L1 tracking algorithm: 'HYBRID' (baseline, 4par fit) or 'HYBRID_DISPLACED' (extended, 5par fit)
+L1TRKALGO = 'HYBRID_QUALITY'  # L1 tracking algorithm: 'HYBRID' (baseline, 4par fit) or 'HYBRID_DISPLACED' (extended, 5par fit)
 
 WRITE_DATA = False
 
@@ -105,12 +105,12 @@ elif (L1TRKALGO == 'HYBRID_DISPLACED'):
     L1TRUTH_NAME = "TTTrackAssociatorFromPixelDigisExtended"
 
 elif (L1TRKALGO == "HYBRID_QUALITY"):
-    process.TTTracksEmulation = cms.Path(process.L1HybridTracks)
-    process.TTTracksEmulationWithTruth = cms.Path(process.L1HybridTracksWithAssociators)
+    process.TTTracksEmulation = cms.Path(process.L1HybridTracksWithQuality)
+    process.TTTracksEmulationWithTruth = cms.Path(process.L1HybridTracksWithAssociatorsWithQuality)
     NHELIXPAR = 4
     L1TRK_NAME  = "TTTracksFromTrackletEmulationWithQuality"
     L1TRK_LABEL = "Level1TTTracks"
-    L1TRUTH_NAME = "TTTrackAssociatorFromPixelDigis"
+    L1TRUTH_NAME = "TTTrackAssociatorFromPixelDigisWithQuality"
     
 # LEGACY ALGORITHM (EXPERTS ONLY): TRACKLET  
 elif (L1TRKALGO == 'TRACKLET'):
@@ -177,7 +177,7 @@ process.L1TrackNtuple = cms.EDAnalyzer('L1TrackNtupleMaker',
                                        # tracking in jets (--> requires AK4 genjet collection present!)
                                        TrackingInJets = cms.bool(False),
                                        GenJetInputTag = cms.InputTag("ak4GenJets", ""),
-                                       TrackQuality = cms.bool(False)
+                                       TrackQuality = cms.bool(True)
                                        )
 
 process.ana = cms.Path(process.L1TrackNtuple)
