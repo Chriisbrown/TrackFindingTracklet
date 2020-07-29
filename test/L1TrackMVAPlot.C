@@ -48,7 +48,7 @@ void L1TrackMVAPlot(TString type,
   gROOT->SetBatch();
   gErrorIgnoreLevel = kWarning;
 
-  SetPlotStyle();
+  //SetPlotStyle();
 
   // ----------------------------------------------------------------------------------------------------------------
   // define input options
