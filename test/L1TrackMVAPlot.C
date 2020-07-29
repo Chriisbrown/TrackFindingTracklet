@@ -157,6 +157,7 @@ void L1TrackMVAPlot(TString type,
   // event loop
   vector<float> MVA1s;
   vector<float> fakes;
+  vector<float> etas;
   for (int i = 0; i < nevt; i++) {
     tree->GetEntry(i, 0);
 
@@ -166,9 +167,11 @@ void L1TrackMVAPlot(TString type,
 
       float MVA1 = trk_MVA1->at(it);
       float fake = trk_fake->at(it);
+      float eta = trk_eta->at(it);
 
       MVA1s.push_back(MVA1);
       fakes.push_back(fake);
+      etas.push_back(eta);
 
       h_trk_MVA1->Fill(MVA1);
     }
@@ -200,12 +203,59 @@ void L1TrackMVAPlot(TString type,
     FPR.push_back((float)FP/N);
   }
 
-  TGraph* ROC = new TGraph(n, &FPR[0], &TPR[0]);
+  TGraph* ROC = new TGraph(n, FPR.data(), TPR.data());
   ROC->SetName("ROC_MVA1");
   ROC->SetTitle("ROC curve; FPR; TPR");
 
   // -------------------------------------------------------------------------------------------
-  // output file for histograms
+  // create TPR vs. eta and FPR vs. eta
+  // -------------------------------------------------------------------------------------------
+
+  vector<float> TPR_eta;
+  vector<float> FPR_eta;
+  vector<float> eta_range_TPR;
+  vector<float> eta_range_FPR;
+  n = 10;
+  float eta_low = -3.5;
+  float eta_high = 3.5;
+  float eta_temp = eta_low;
+  float dt = .5;
+  while (eta_temp<eta_high){
+    int TP = 0;
+    int FP = 0;
+    int P = 0;
+    int N = 0;
+    for (int k=0; k<etas.size(); k++){
+      if (etas.at(k)>eta_temp && etas.at(k)<=(eta_temp+(eta_high-eta_low)/n)){
+	if (fakes.at(k)){
+	  P++;
+	  if (MVA1s.at(k)>dt) TP++;
+	}else{
+	  N++;
+	  if (MVA1s.at(k)>dt) FP++;
+	}
+      }
+    }
+    if (P>0){
+      TPR_eta.push_back((float)TP/P);
+      eta_range_TPR.push_back(eta_temp);
+    }if (N>0){
+      FPR_eta.push_back((float)FP/N);
+      eta_range_FPR.push_back(eta_temp);
+    }
+    eta_temp += (eta_high-eta_low)/n;
+  }
+
+  TGraph* TPR_vs_eta = new TGraph(TPR_eta.size(), eta_range_TPR.data(), TPR_eta.data());
+  TPR_vs_eta->SetName("TPR_vs_eta_MVA1");
+  TPR_vs_eta->SetTitle("TPR vs. #eta; #eta; TPR");
+
+  TGraph* FPR_vs_eta = new TGraph(FPR_eta.size(), eta_range_FPR.data(), FPR_eta.data());
+  FPR_vs_eta->SetName("FPR_vs_eta_MVA1");
+  FPR_vs_eta->SetTitle("FPR vs. #eta; #eta; FPR");
+
+  // -------------------------------------------------------------------------------------------
+  // output file for histograms and graphs
   // -------------------------------------------------------------------------------------------
 
   TFile* fout;
@@ -216,10 +266,16 @@ void L1TrackMVAPlot(TString type,
   // -------------------------------------------------------------------------------------------
 
   h_trk_MVA1->Draw();
-  ROC->Draw("ap");
-
   h_trk_MVA1->Write();
+
+  ROC->Draw("ap");
   ROC->Write();
+
+  TPR_vs_eta->Draw("ap");
+  TPR_vs_eta->Write();
+
+  FPR_vs_eta->Draw("ap");
+  FPR_vs_eta->Write();
 
   fout->Close();
 }
