@@ -23,6 +23,7 @@
 #include "TProfile.h"
 #include "TProfile2D.h"
 #include "TMath.h"
+#include "TGraph.h"
 #include <TError.h>
 
 #include <iostream>
@@ -143,10 +144,6 @@ void L1TrackMVAPlot(TString type,
   // histograms
   // ----------------------------------------------------------------------------------------------------------------
 
-  TH1F* h_trk_chi2 = new TH1F("trk_chi2", ";#chi^{2}; L1 tracks / 1.0", 100, 0, 100);
-  TH1F* h_trk_chi2rphi = new TH1F("trk_chi2rphi", ";#chi^{2}_{r-#phi}; L1 tracks / 1.0", 100, 0, 100);
-  TH1F* h_trk_chi2rz = new TH1F("trk_chi2rz", ";#chi^{2}_{r-z}; L1 tracks / 1.0", 100, 0, 100);
-
   TH1F* h_trk_MVA1 = new TH1F("trk_MVA1", "; MVA1; L1 tracks", 50, 0, 1);
 
   // ----------------------------------------------------------------------------------------------------------------
@@ -158,6 +155,8 @@ void L1TrackMVAPlot(TString type,
 
   // ----------------------------------------------------------------------------------------------------------------
   // event loop
+  vector<float> MVA1s;
+  vector<float> fakes;
   for (int i = 0; i < nevt; i++) {
     tree->GetEntry(i, 0);
 
@@ -165,43 +164,62 @@ void L1TrackMVAPlot(TString type,
       // ----------------------------------------------------------------------------------------------------------------
       // track properties
 
-      // fill all trk chi2 & chi2/dof histograms, including for chi2 r-phi and chi2 r-z
-      float chi2 = trk_chi2->at(it);
-      float chi2rphi = trk_chi2rphi->at(it);
-      float chi2rz = trk_chi2rz->at(it);
       float MVA1 = trk_MVA1->at(it);
+      float fake = trk_fake->at(it);
 
-      if (trk_pt->at(it) > 2.0) {  //TRK pt > TP_minPt
-
-        h_trk_chi2->Fill(chi2);
-        h_trk_chi2rphi->Fill(chi2rphi);
-        h_trk_chi2rz->Fill(chi2rz);
-      }  //end TRK pt > TP_minPt
+      MVA1s.push_back(MVA1);
+      fakes.push_back(fake);
 
       h_trk_MVA1->Fill(MVA1);
     }
   }
 
   // -------------------------------------------------------------------------------------------
+  // create ROC curve
+  // -------------------------------------------------------------------------------------------
+
+  vector<float> TPR;
+  vector<float> FPR;
+  int n = 30; //num of entries on ROC curve
+  for (int i=0; i<n; i++){
+    float dt = (float)i/n;
+    int TP = 0;
+    int FP = 0;
+    int P = 0;
+    int N = 0;
+    for (int k=0; k<MVA1s.size(); k++){
+      if (fakes.at(k)){
+	P++;
+	if (MVA1s.at(k)>dt) TP++;
+      }else{
+	N++;
+	if (MVA1s.at(k)>dt) FP++;
+      }
+    }
+    TPR.push_back((float)TP/P);
+    FPR.push_back((float)FP/N);
+  }
+
+  TGraph* ROC = new TGraph(n, &FPR[0], &TPR[0]);
+  ROC->SetName("ROC_MVA1");
+  ROC->SetTitle("ROC curve; FPR; TPR");
+
+  // -------------------------------------------------------------------------------------------
   // output file for histograms
   // -------------------------------------------------------------------------------------------
 
   TFile* fout;
-  fout = new TFile(type_dir + "output_" + type + treeName + ".root", "recreate");
+  fout = new TFile(type_dir + "MVAoutput_" + type + treeName + ".root", "recreate");
 
   // -------------------------------------------------------------------------------------------
   // draw and save plots
   // -------------------------------------------------------------------------------------------
 
-  h_trk_chi2->Draw();
-  h_trk_chi2rphi->Draw();
-  h_trk_chi2rz->Draw();
   h_trk_MVA1->Draw();
+  ROC->Draw("ap");
 
-  h_trk_chi2->Write();
-  h_trk_chi2rphi->Write();
-  h_trk_chi2rz->Write();
   h_trk_MVA1->Write();
+  ROC->Write();
 
   fout->Close();
 }
