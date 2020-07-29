@@ -48,20 +48,25 @@ process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:phase2_realistic', '')
 # input and output
 ############################################################
 
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(10))
 
-# Get list of MC datasets from repo, or specify yourself.
+options = VarParsing.VarParsing ('Analysis')
 
-def getTxtFile(txtFileName): 
-  return FileUtils.loadListFromFile(os.environ['CMSSW_BASE']+'/src/'+txtFileName)
+options.parseArguments()
 
-if GEOMETRY == "D49":
-    #inputMC = ["/store/relval/CMSSW_11_1_0_pre2/RelValTTbar_14TeV/GEN-SIM-DIGI-RAW/PU25ns_110X_mcRun4_realistic_v2_2026D49PU200-v1/20000/F7BF4AED-51F1-9D47-B86D-6C3DDA134AB9.root"]
-    inputMC = ['/store/relval/CMSSW_11_1_0/RelValTTbar_14TeV/GEN-SIM-DIGI-RAW/PU25ns_110X_mcRun4_realistic_v3_2026D49PU200-v1/10000/55A5DB80-84E7-2746-819E-2ECAFB126BD2.root']    
-else:
-    print "this is not a valid geometry!!!"
-    
-process.source = cms.Source("PoolSource", fileNames = cms.untracked.vstring(*inputMC))
+inputFiles = []
+#inputFiles = ['/store/relval/CMSSW_11_1_0/RelValTTbar_14TeV/GEN-SIM-DIGI-RAW/PU25ns_110X_mcRun4_realistic_v3_2026D49PU200-v1/10000/55A5DB80-84E7-2746-819E-2ECAFB126BD2.root']    
+for filePath in options.inputFiles:
+    if filePath.endswith(".root"):
+        inputFiles.append(filePath)
+    else:
+        inputFiles += FileUtils.loadListFromFile(filePath)
+
+############################################################
+# input and output
+############################################################
+
+
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxEvents) )
 
 process.TFileService = cms.Service("TFileService", fileName = cms.string('TTbar_PU200_'+GEOMETRY+'.root'), closeFileFast = cms.untracked.bool(True))
 process.Timing = cms.Service("Timing", summaryOnly = cms.untracked.bool(True))
