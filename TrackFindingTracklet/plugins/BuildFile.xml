@@ -3,6 +3,7 @@
   <use name="root"/>
   <use name="CommonTools/UtilAlgos"/>
   <use name="DataFormats/L1TrackTrigger"/>
+  <use name="FWCore/Utilities"/>
   <use name="L1Trigger/TrackFindingTMTT"/>
   <use name="L1Trigger/TrackFindingTracklet"/>
   <use name="L1Trigger/TrackTrigger"/>

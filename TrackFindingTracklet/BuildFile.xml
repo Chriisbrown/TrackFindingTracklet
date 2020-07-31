@@ -27,7 +27,6 @@
 <use name="Geometry/TrackerGeometryBuilder"/>
 <use name="L1Trigger/TrackFindingTMTT"/>
 <use name="PhysicsTools/CandUtils"/>
-<use name="PhysicsTools/ONNXRuntime"/>
 <use name="RecoTracker/TrackProducer"/>
 <use name="SimDataFormats/GeneratorProducts"/>
 <use name="SimDataFormats/TrackingHit"/>
