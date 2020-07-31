@@ -41,7 +41,7 @@ Quality::Quality(edm::ParameterSet Params){
                        Params.getParameter<string>("ONNXmodel"),
                        Params.getParameter<string>("ONNXInputName"),
                        Params.getParameter<string>("ONNXOutputName"),
-                       Params.getParameter<string>("in_features"),); 
+                       Params.getParameter<vector<string>>("in_features")); 
     }
 
 }

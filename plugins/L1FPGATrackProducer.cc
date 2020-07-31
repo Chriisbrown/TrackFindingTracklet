@@ -288,10 +288,11 @@ L1FPGATrackProducer::L1FPGATrackProducer(edm::ParameterSet const& iConfig)
   }
 
   quality_ = iConfig.getParameter<bool>("Quality");
-  Quality_params = iConfig.getParameter<edm::ParameterSet>("TrackQualityPSet")
+  Quality_params = iConfig.getParameter<edm::ParameterSet>("TrackQualityPSet");
   if (quality_){
-    Quality(Quality_params)
+    Quality_model = Quality(Quality_params);
     }
+  }
 
 /////////////
 // DESTRUCTOR

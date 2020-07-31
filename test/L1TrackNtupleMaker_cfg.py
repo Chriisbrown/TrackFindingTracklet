@@ -137,7 +137,7 @@ else:
     print "ERROR: Unknown L1TRKALGO option"
     exit(1)
 
-process.load("L1Trigger.TrackFindingTracklet.LTrackClassifier_cfi")
+#process.load("L1Trigger.TrackFindingTracklet.LTrackClassifier_cfi")
 process.TrackQualityParams.Quality_Algorithm = cms.string("NN")
 
 
