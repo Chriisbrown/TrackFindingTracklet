@@ -42,6 +42,8 @@ class Quality{
             int nStubsmin
             );
 
+    Quality(edm::ParameterSet Params);
+
     ~Quality() = default;
 
     std::vector<float> Feature_Transform(TTTrack <Ref_Phase2TrackerDigi_> aTrack, 

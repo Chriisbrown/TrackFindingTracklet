@@ -172,6 +172,7 @@ private:
   unsigned int nHelixPar_;
   bool extended_;
   bool quality_;
+  edm::ParameterSet Quality_params;
   Quality Quality_model;
 
   std::map<string, vector<int>> dtclayerdisk;
@@ -287,28 +288,10 @@ L1FPGATrackProducer::L1FPGATrackProducer(edm::ParameterSet const& iConfig)
   }
 
   quality_ = iConfig.getParameter<bool>("Quality");
+  Quality_params = iConfig.getParameter<edm::ParameterSet>("TrackQualityPSet")
   if (quality_){
-    string Algorithm =  iConfig.getParameter<string>("Quality_Algorithm");
-    if (Algorithm == "Cut"){
-      Quality_model = Quality(Algorithm,
-                             (float)iConfig.getParameter<double>("maxZ0"),
-                             (float)iConfig.getParameter<double>("maxEta"),
-                             (float)iConfig.getParameter<double>("chi2dofMax"),
-                             (float)iConfig.getParameter<double>("bendchi2Max"),
-                             (float)iConfig.getParameter<double>("minPt"),
-                             iConfig.getParameter<int>("nStubsmin"));
+    Quality(Quality_params)
     }
-
-    else{
-      Quality_model = Quality(Algorithm,
-                              edm::FileInPath(iConfig.getParameter<string>("ONNXmodel")).fullPath(),
-                              iConfig.getParameter<string>("ONNXInputName"),
-                              iConfig.getParameter<string>("ONNXOutputName"),
-                              iConfig.getParameter<vector<string>>("in_features"));
-    }
-     
-  }
-}
 
 /////////////
 // DESTRUCTOR

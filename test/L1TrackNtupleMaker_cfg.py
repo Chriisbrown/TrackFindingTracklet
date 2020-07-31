@@ -104,14 +104,6 @@ elif (L1TRKALGO == 'HYBRID_DISPLACED'):
     L1TRK_NAME  = "TTTracksFromExtendedTrackletEmulation"
     L1TRK_LABEL = "Level1TTTracks"
     L1TRUTH_NAME = "TTTrackAssociatorFromPixelDigisExtended"
-
-elif (L1TRKALGO == "HYBRID_QUALITY"):
-    process.TTTracksEmulation = cms.Path(process.L1HybridTracksWithQuality)
-    process.TTTracksEmulationWithTruth = cms.Path(process.L1HybridTracksWithAssociatorsWithQuality)
-    NHELIXPAR = 4
-    L1TRK_NAME  = "TTTracksFromTrackletEmulationWithQuality"
-    L1TRK_LABEL = "Level1TTTracks"
-    L1TRUTH_NAME = "TTTrackAssociatorFromPixelDigisWithQuality"
     
 # LEGACY ALGORITHM (EXPERTS ONLY): TRACKLET  
 elif (L1TRKALGO == 'TRACKLET'):
@@ -144,6 +136,10 @@ elif (L1TRKALGO == 'TMTT'):
 else:
     print "ERROR: Unknown L1TRKALGO option"
     exit(1)
+
+process.load("L1Trigger.TrackFindingTracklet.LTrackClassifier_cfi")
+process.TrackQualityParams.Quality_Algorithm = cms.string("NN")
+
 
 ############################################################
 # Define the track ntuple process, MyProcess is the (unsigned) PDGID corresponding to the process which is run

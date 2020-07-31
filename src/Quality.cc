@@ -24,6 +24,28 @@ Quality::Quality(string Algorithm,
                 Set_Cut_Parameters(Algorithm,maxZ0,maxEta,chi2dofMax,bendchi2Max,minPt,nStubsmin);   
             }
 
+Quality::Quality(edm::ParameterSet Params){
+    string Algorithm = Params.getParameter<string>("Quality_Algorithm");
+    if (Algorithm == "Cut"){
+        Set_Cut_Parameters(Algorithm,
+                           (float)Params.getParameter<double>("maxZ0"),
+                           (float)Params.getParameter<double>("maxEta"),
+                           (float)Params.getParameter<double>("chi2dofMax"),
+                           (float)Params.getParameter<double>("bendchi2Max"),
+                           (float)Params.getParameter<double>("minPt"),
+                           Params.getParameter<int>("nStubsmin")); 
+    }
+
+    else {
+        Set_ONNX_Model(Algorithm,
+                       Params.getParameter<string>("ONNXmodel"),
+                       Params.getParameter<string>("ONNXInputName"),
+                       Params.getParameter<string>("ONNXOutputName"),
+                       Params.getParameter<string>("in_features"),); 
+    }
+
+}
+
  
 vector<float> Quality::Feature_Transform(TTTrack < Ref_Phase2TrackerDigi_ > aTrack, std::vector<std::string> in_features) {
     // List input features for MVA in proper order below, the features options are 
