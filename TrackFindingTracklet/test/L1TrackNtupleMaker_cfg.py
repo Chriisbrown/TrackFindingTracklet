@@ -13,7 +13,7 @@ process = cms.Process("L1TrackNtuple")
 ############################################################
 
 GEOMETRY = "D49"
-L1TRKALGO = 'HYBRID_QUALITY'  # L1 tracking algorithm: 'HYBRID' (baseline, 4par fit) or 'HYBRID_DISPLACED' (extended, 5par fit)
+L1TRKALGO = 'HYBRID'  # L1 tracking algorithm: 'HYBRID' (baseline, 4par fit) or 'HYBRID_DISPLACED' (extended, 5par fit)
 
 WRITE_DATA = False
 
@@ -84,6 +84,9 @@ process.Timing = cms.Service("Timing", summaryOnly = cms.untracked.bool(True))
 ############################################################
 # L1 tracking
 ############################################################
+process.load("L1Trigger.TrackTrigger.LTrackClassifier_cfi")
+process.TrackQualityParams.Quality_Algorithm = cms.string("NN")
+
 
 process.load("L1Trigger.TrackFindingTracklet.L1HybridEmulationTracks_cff")
 
@@ -137,8 +140,6 @@ else:
     print "ERROR: Unknown L1TRKALGO option"
     exit(1)
 
-#process.load("L1Trigger.TrackFindingTracklet.LTrackClassifier_cfi")
-process.TrackQualityParams.Quality_Algorithm = cms.string("NN")
 
 
 ############################################################

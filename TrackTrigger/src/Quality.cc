@@ -1,4 +1,4 @@
-#include "L1Trigger/TrackFindingTracklet/interface/Quality.h"
+#include "L1Trigger/TrackTrigger/interface/Quality.h"
 
 using namespace std;
 

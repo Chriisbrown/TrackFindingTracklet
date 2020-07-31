@@ -1,5 +1,5 @@
-#ifndef L1Trigger_TrackFindingTracklet_interface_Quality_h
-#define L1Trigger_TrackFindingTracklet_interface_Quality_h
+#ifndef L1Trigger_TrackTrigger_interface_Quality_h
+#define L1Trigger_TrackTrigger_interface_Quality_h
 
 #include <iostream>
 #include <set>

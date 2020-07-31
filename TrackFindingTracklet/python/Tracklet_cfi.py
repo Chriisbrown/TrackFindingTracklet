@@ -1,5 +1,5 @@
 import FWCore.ParameterSet.Config as cms
-from L1Trigger.TrackFindingTracklet.L1TrackClassifier_cfi import TrackQualityParams
+from L1Trigger.TrackTrigger.L1TrackClassifier_cfi import *
 
 TTTracksFromTrackletEmulation = cms.EDProducer("L1FPGATrackProducer",
                                                TTStubSource = cms.InputTag("TTStubsFromPhase2TrackerDigis","StubAccepted"),
