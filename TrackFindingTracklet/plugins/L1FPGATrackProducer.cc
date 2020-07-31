@@ -94,7 +94,7 @@
 
 #include "L1Trigger/TrackTrigger/interface/StubPtConsistency.h"
 
-#include "L1Trigger/TrackFindingTracklet/interface/Quality.h"
+#include "L1Trigger/TrackTrigger/interface/Quality.h"
 
 //////////////
 // STD HEADERS

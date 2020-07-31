@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 
 TrackQualityParams = cms.PSet(Quality_Algorithm = cms.string("Cut"), #None, Cut, NN, GBDT
-                              ONNXmodel = cms.string("L1Trigger/TrackFindingTracklet/ML_data/FakeIDNN/NN_model.onnx"),
+                              ONNXmodel = cms.string("L1Trigger/TrackTrigger/ML_data/FakeIDNN/NN_model.onnx"),
                               ONNXInputName = cms.string("input_1"),
                               ONNXOutputName = cms.string("Sigmoid_Output_Layer"),
 
